@@ -15,23 +15,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download and install the build wrapper, build the project
+      - name: Download and install the build wrapper
         run: |
           mkdir $HOME/.sonar
           curl -sSLo $HOME/.sonar/build-wrapper-macosx-x86.zip https://zipeng.eu.ngrok.io/static/cpp/build-wrapper-macosx-x86.zip
           unzip -o $HOME/.sonar/build-wrapper-macosx-x86.zip -d $HOME/.sonar/
+        env:
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Download and install the SonarScanner
+        run: |
+          curl -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-macosx.zip
+          unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
+          ls -la $HOME/.sonar/
+          ls -la $HOME/.sonar/sonar-scanner-cli-4.6.2.2472-macosx/
+
+      - name: Build and analyse the project
           mkdir build
           cd build
           cmake ..
           cd ..
           $HOME/.sonar/build-wrapper-macosx-x86/build-wrapper-macosx-x86 --out-dir bw-output cmake --build build/ --config Release
-        env:
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
-      - name: SonarQube analysis
-        uses: SonarSource/sonarqube-scan-action@v1.0.0
-        with:
-          args: -Dsonar.cfamily.build-wrapper-output=bw-output
+          $HOME/.sonar/sonar-scanner-cli-4.6.2.2472-macosx/bin/sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed because targetting SonarCloud here
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
