@@ -24,7 +24,7 @@ jobs:
           cd build
           cmake ..
           cd ..
-          $HOME/.sonar/build-wrapper-macosx-x86/build-wrapper-macosx-x86-64 --out-dir bw-output cmake --build build/ --config Release
+          $HOME/.sonar/build-wrapper-macosx-x86/build-wrapper-macosx-x86 --out-dir bw-output cmake --build build/ --config Release
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
