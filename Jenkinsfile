@@ -16,7 +16,7 @@ node {
       cd build
       cmake ..
       cd ..
-      .sonar/build-wrapper-macosx-x86/build-wrapper-macosx-x86 --out-dir bw-output cmake --build build/ --config Release
+      .sonar/build-wrapper-macosx/build-wrapper-macosx --out-dir bw-output cmake --build build/ --config Release
     '''
   }
   stage('SonarQube Analysis') {
