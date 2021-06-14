@@ -5,7 +5,7 @@ node {
   stage('Download Build Wrapper') {
     sh '''
       mkdir -p .sonar
-      curl -sSLo build-wrapper-macosx.zip https://localhost:9000/static/cpp/build-wrapper-macosx.zip
+      curl -sSLo build-wrapper-macosx.zip http://localhost:9000/static/cpp/build-wrapper-macosx.zip
       unzip -o build-wrapper-macosx.zip -d .sonar
     '''
   }
