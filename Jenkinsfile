@@ -14,9 +14,9 @@ node {
         rm -rf build
         mkdir build
         cd build
-        cmake ..
+        /usr/local/bin/cmake ..
         cd ..
-        .sonar/build-wrapper-macosx-x86/build-wrapper-macosx-x86 --out-dir bw-output <your clean build command>
+        .sonar/build-wrapper-macosx-x86/build-wrapper-macosx-x86 --out-dir bw-output /usr/local/bin/cmake --build build/ --config Release
       '''
     }
     stage('SonarQube Analysis') {
