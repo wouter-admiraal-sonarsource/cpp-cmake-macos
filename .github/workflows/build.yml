@@ -35,7 +35,8 @@ jobs:
 
       - name: Build and analyse the project
         run: |
-          echo $PATH
+          export PATH=$HOME/.sonar/build-wrapper-macosx-x86:$PATH
+          export PATH=$SONAR_SCANNER_HOME/bin:$PATH
           mkdir build
           cd build
           cmake ..
