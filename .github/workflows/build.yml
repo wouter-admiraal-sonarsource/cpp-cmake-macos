@@ -44,7 +44,11 @@ jobs:
           cd ..
           # Analyze project (part of tutorial)
           build-wrapper-macosx-x86 --out-dir bw-output cmake --build build/ --config Release
-          sonar-scanner -X -Dsonar.projectKey=cpp-cmake-macos -Dsonar.sources=. -Dsonar.cfamily.build-wrapper-output=bw-output -Dsonar.host.url=https://wad.eu.ngrok.io
+          sonar-scanner \
+            -Dsonar.projectKey=cpp-cmake-macos \
+            -Dsonar.sources=. \
+            -Dsonar.cfamily.build-wrapper-output=bw-output \
+            -Dsonar.host.url=https://wad.eu.ngrok.io
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
