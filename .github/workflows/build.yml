@@ -17,16 +17,21 @@ jobs:
 
       - name: Download and install the build wrapper
         run: |
-          mkdir $HOME/.sonar
-          curl -sSLo $HOME/.sonar/build-wrapper-macosx-x86.zip https://zipeng.eu.ngrok.io/static/cpp/build-wrapper-macosx-x86.zip
+          curl --create-dirs -sSLo $HOME/.sonar/build-wrapper-macosx-x86.zip https://wad.eu.ngrok.io/static/cpp/build-wrapper-macosx-x86.zip
           unzip -o $HOME/.sonar/build-wrapper-macosx-x86.zip -d $HOME/.sonar/
+          export PATH=$HOME/.sonar/build-wrapper-macosx-x86:$PATH
+
         env:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
       - name: Download and install the SonarScanner
         run: |
-          curl -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-macosx.zip
+          export SONAR_SCANNER_VERSION=4.7.0.2747
+          export SONAR_SCANNER_HOME=$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-macosx
+          curl --create-dirs -sSLo $HOME/.sonar/sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-macosx.zip
           unzip -o $HOME/.sonar/sonar-scanner.zip -d $HOME/.sonar/
+          export PATH=$SONAR_SCANNER_HOME/bin:$PATH
+          export SONAR_SCANNER_OPTS="-server"
 
       - name: Build and analyse the project
         run: |
@@ -34,9 +39,12 @@ jobs:
           cd build
           cmake ..
           cd ..
-          $HOME/.sonar/build-wrapper-macosx-x86/build-wrapper-macosx-x86 --out-dir bw-output cmake --build build/ --config Release
-          $HOME/.sonar/sonar-scanner-4.6.2.2472-macosx/bin/sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
+          build-wrapper-macosx-x86 --out-dir bw-output cmake --build build/ --config Release
+          sonar-scanner \
+            -Dsonar.projectKey=cpp-cmake-macos \
+            -Dsonar.sources=. \
+            -Dsonar.cfamily.build-wrapper-output=bw-output \
+            -Dsonar.host.url=https://wad.eu.ngrok.io
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed because targetting SonarCloud here
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
