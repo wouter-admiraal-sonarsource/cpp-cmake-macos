@@ -21,9 +21,6 @@ jobs:
           unzip -o $HOME/.sonar/build-wrapper-macosx-x86.zip -d $HOME/.sonar/
           export PATH=$HOME/.sonar/build-wrapper-macosx-x86:$PATH
 
-        env:
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
       - name: Download and install the SonarScanner
         run: |
           export SONAR_SCANNER_VERSION=4.7.0.2747
