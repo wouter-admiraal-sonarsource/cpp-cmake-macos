@@ -35,6 +35,7 @@ jobs:
 
       - name: Build and analyse the project
         run: |
+          echo $PATH
           mkdir build
           cd build
           cmake ..
